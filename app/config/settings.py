@@ -54,6 +54,5 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     return Settings()
 
+
 settings: Settings = get_settings()
-print(f"DEBUG: DATABASE_URL ENV VAR: {settings.DATABASE_URL_ENV}")
-print(f"DEBUG: FINAL DATABASE_URL: {settings.DATABASE_URL}")
