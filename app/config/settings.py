@@ -40,8 +40,13 @@ class Settings(BaseSettings):
         url = os.getenv("DATABASE_URL")
         if url:
              clean_url = url.strip().strip('"').strip("'")
-             if os.getenv("RENDER") and "sslmode" not in clean_url:
-                 return f"{clean_url}?sslmode=require"
+             # Enforce SSL on Render
+             if os.getenv("RENDER"):
+                 print("DEBUG: Render environment detected. Enforcing SSL.")
+                 if "sslmode" not in clean_url:
+                     separator = "&" if "?" in clean_url else "?"
+                     clean_url = f"{clean_url}{separator}sslmode=require"
+                 print(f"DEBUG: FINAL DATABASE_URL (masked): {clean_url.split('@')[-1] if '@' in clean_url else '...'} ")
              return clean_url
         if self.DATABASE_URL_ENV:
             return self.DATABASE_URL_ENV
