@@ -39,7 +39,10 @@ class Settings(BaseSettings):
         import os
         url = os.getenv("DATABASE_URL")
         if url:
-             return url.strip().strip('"').strip("'")
+             clean_url = url.strip().strip('"').strip("'")
+             if os.getenv("RENDER") and "sslmode" not in clean_url:
+                 return f"{clean_url}?sslmode=require"
+             return clean_url
         if self.DATABASE_URL_ENV:
             return self.DATABASE_URL_ENV
             
