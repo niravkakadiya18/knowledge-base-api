@@ -39,7 +39,7 @@ class Settings(BaseSettings):
         import os
         url = os.getenv("DATABASE_URL")
         if url:
-             return url
+             return url.strip().strip('"').strip("'")
         if self.DATABASE_URL_ENV:
             return self.DATABASE_URL_ENV
             
