@@ -1,0 +1,27 @@
+services:
+  # The Web Service
+  - type: web
+    name: knowledge-base-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0 # Or whichever supported version matches your requirements
+      - key: DATABASE_URL
+        fromDatabase:
+          name: knowledge-base-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+
+databases:
+  - name: knowledge-base-db
+    databaseName: knowledge_base
+    user: knowledge_user
+
+# Note: Render will automatically provision a PostgreSQL database and link it.
