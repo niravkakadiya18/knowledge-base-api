@@ -36,6 +36,10 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
+        import os
+        url = os.getenv("DATABASE_URL")
+        if url:
+             return url
         if self.DATABASE_URL_ENV:
             return self.DATABASE_URL_ENV
         return f"postgresql://{self.DATABASE_USER}:{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
@@ -45,5 +49,6 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     return Settings()
 
-
 settings: Settings = get_settings()
+print(f"DEBUG: DATABASE_URL ENV VAR: {settings.DATABASE_URL_ENV}")
+print(f"DEBUG: FINAL DATABASE_URL: {settings.DATABASE_URL}")
