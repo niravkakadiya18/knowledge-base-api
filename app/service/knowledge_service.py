@@ -8,13 +8,7 @@ from app.dto.core import KnowledgeCreate, KnowledgeResponse, KnowledgeSearchRequ
 class KnowledgeService:
     @staticmethod
     def get_connection():
-        return psycopg2.connect(
-            host=settings.DATABASE_HOST,
-            port=settings.DATABASE_PORT,
-            database=settings.DATABASE_NAME,
-            user=settings.DATABASE_USER,
-            password=settings.DATABASE_PASSWORD,
-        )
+        return psycopg2.connect(settings.DATABASE_URL)
 
     @staticmethod
     def create_entry(payload: KnowledgeCreate, created_by: int) -> Optional[KnowledgeResponse]:

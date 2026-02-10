@@ -15,24 +15,12 @@ logger = logging.getLogger(__name__)
 
 # Initialize RBAC (Shared instance logic could be refactored, but instantiated here for now)
 rbac_manager = RBACManager(
-    db_connection_params={
-        "host": settings.DATABASE_HOST,
-        "port": settings.DATABASE_PORT,
-        "database": settings.DATABASE_NAME,
-        "user": settings.DATABASE_USER,
-        "password": settings.DATABASE_PASSWORD,
-    },
+    db_connection_params={"dsn": settings.DATABASE_URL},
     jwt_secret=settings.SECRET_KEY
 )
 
 def _get_db_connection():
-    return psycopg2.connect(
-        host=settings.DATABASE_HOST,
-        port=settings.DATABASE_PORT,
-        database=settings.DATABASE_NAME,
-        user=settings.DATABASE_USER,
-        password=settings.DATABASE_PASSWORD,
-    )
+    return psycopg2.connect(settings.DATABASE_URL)
 
 def list_users(
     page: int, limit: int, search: str, role_filter: str, status_filter: str, 

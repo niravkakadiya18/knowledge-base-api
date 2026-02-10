@@ -16,13 +16,7 @@ logger = logging.getLogger(__name__)
 class ClientService:
     @staticmethod
     def _get_connection():
-        return psycopg2.connect(
-            host=settings.DATABASE_HOST,
-            port=settings.DATABASE_PORT,
-            database=settings.DATABASE_NAME,
-            user=settings.DATABASE_USER,
-            password=settings.DATABASE_PASSWORD,
-        )
+        return psycopg2.connect(settings.DATABASE_URL)
 
     @staticmethod
     def _parse_json_field(value):

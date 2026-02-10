@@ -1,6 +1,8 @@
+from typing import Optional
 from functools import lru_cache
 
 from dotenv import load_dotenv
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
@@ -17,6 +19,9 @@ class Settings(BaseSettings):
     DATABASE_NAME: str = "jma_knowledge_base"
     DATABASE_USER: str = "jma_user"
     DATABASE_PASSWORD: str = ""
+    
+    # Capture DATABASE_URL from environment (e.g. Render)
+    DATABASE_URL_ENV: Optional[str] = Field(None, validation_alias="DATABASE_URL")
 
     # Auth
     SECRET_KEY: str = "change_this_to_a_secure_secret_key"
@@ -25,11 +30,14 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        env_file_encoding="utf-8"
+        env_file_encoding="utf-8",
+        extra="ignore"
     )
 
     @property
     def DATABASE_URL(self) -> str:
+        if self.DATABASE_URL_ENV:
+            return self.DATABASE_URL_ENV
         return f"postgresql://{self.DATABASE_USER}:{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
 
 
