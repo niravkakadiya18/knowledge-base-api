@@ -42,6 +42,11 @@ class Settings(BaseSettings):
              return url
         if self.DATABASE_URL_ENV:
             return self.DATABASE_URL_ENV
+            
+        # Check if running on Render
+        if os.getenv("RENDER"):
+            raise ValueError("CRITICAL: Running on Render but DATABASE_URL environment variable is missing! Please add it in Render Dashboard.")
+            
         return f"postgresql://{self.DATABASE_USER}:{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
 
 
