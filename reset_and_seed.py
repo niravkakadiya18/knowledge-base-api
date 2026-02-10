@@ -16,13 +16,7 @@ def hash_password(password: str) -> tuple[str, str]:
 
 def reset_and_seed():
     try:
-        conn = psycopg2.connect(
-            host=settings.DATABASE_HOST,
-            port=settings.DATABASE_PORT,
-            database=settings.DATABASE_NAME,
-            user=settings.DATABASE_USER,
-            password=settings.DATABASE_PASSWORD,
-        )
+        conn = psycopg2.connect(settings.DATABASE_URL)
         cur = conn.cursor()
         print("🧹 Cleaning database...")
         
